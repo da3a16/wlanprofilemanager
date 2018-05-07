@@ -12,8 +12,15 @@ var enableProfile=function(intfName, ssid, p){
     console.log(stdout);
   });
 
-  cmd = 'netsh interface ip set dnsserver name="%s" static %s primary'
+  cmd = 'netsh interface ip set dnsserver name="%s" static %s primary validate=no'
   cmd = util.format(cmd, intfName, p.dns)
+  console.log(cmd);
+  exec(cmd, function(error, stdout, stderr){
+    console.log(stdout);
+  });
+
+  cmd = 'netsh interface ip add dns name="%s" addr=%s index=2 validate=no'
+  cmd = util.format(cmd, intfName, p.dns2)
   console.log(cmd);
   exec(cmd, function(error, stdout, stderr){
     console.log(stdout);
@@ -48,7 +55,7 @@ exec('netsh wlan show interfaces', function(error, stdout, stderr) {
       var value = kvs[1].trim();
       if(key == "SSID"){
         ssid = value;
-      }else if (key === "Name"){
+      }else if (key === "Nome" || key === "Name"){
         intfName = value;
       }
     }
